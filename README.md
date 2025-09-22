@@ -9,9 +9,9 @@
 
 ## Implementierte Algorithmen
 
-[x] bubblesort
-[x] selection-sort
-[x] insertion-sort
-[ ] heapsort
-[ ] mergesort
-[ ] quicksort
+- [x] bubblesort
+- [x] selection-sort
+- [x] insertion-sort
+- [ ] heapsort
+- [ ] mergesort
+- [ ] quicksort
