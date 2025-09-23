@@ -14,4 +14,4 @@
 - [x] insertion-sort
 - [ ] heapsort
 - [ ] mergesort
-- [ ] quicksort
+- [x] quicksort
