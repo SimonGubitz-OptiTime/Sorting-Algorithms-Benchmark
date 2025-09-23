@@ -3,37 +3,38 @@ unit uInsertionSort;
 interface
 
 uses
-  SysUtils;
-  // System.Generics.Collections;
+  SysUtils,
+  Generics.Collections,
+  clrBenchmarkArray;
 
 
-// procedure InsertionSort(var AList: TList<Integer>);
-function InsertionSort(AList: TArray<Integer>): TArray<Integer>;
+// procedure InsertionSort(var AList: TArray<Integer>);
+function InsertionSort(AList: TBenchmarkArray): TArray<Integer>;
 
 implementation
 
-// procedure InsertionSort(var AList: TList<Integer>);
-function InsertionSort(AList: TArray<Integer>): TArray<Integer>;
+function InsertionSort(AList: TBenchmarkArray): TArray<Integer>;
 var
   Ndx, key, j: Integer;
 begin
-
-  Result := AList;
-
-  for Ndx := 1 to Length(Result) -1  do
+  for Ndx := 1 to AList.Count -1  do
   begin
-    key := Result[Ndx];
+    key := AList[Ndx];
     j := Ndx - 1;
 
     while ( (j >= 0)
-      and (key < Result[j]) ) do
+      and (key < AList[j]) ) do
     begin
-      Result[j + 1] := Result[j];
+      AList[j + 1] := AList[j];
       j := j - 1;
     end;
 
-    Result[j + 1] := key;
+    AList[j + 1] := key;
   end;
+
+  Result := AList.AsArray;
+
 end;
+
 
 end.

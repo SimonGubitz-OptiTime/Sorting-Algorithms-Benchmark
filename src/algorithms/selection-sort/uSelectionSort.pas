@@ -3,48 +3,48 @@ unit uSelectionSort;
 interface
 
 uses
-  SysUtils;
-  // System.Generics.Collections;
+  SysUtils,
+  Generics.Collections,
+  clrBenchmarkArray;
 
 
 // function SelectionSort(var AList: List<Integer>);
-function SelectionSort(AList: TArray<Integer>): TArray<Integer>;
+function SelectionSort(AList: TBenchmarkArray): TArray<Integer>;
 
 implementation
 
 // function SelectionSort(var AList: List<Integer>);
-function SelectionSort(AList: TArray<Integer>): TArray<Integer>;
+function SelectionSort(AList: TBenchmarkArray): TArray<Integer>;
 var
   I, J: Integer;
-  minNdx: Integer;
-  temp: Integer;
+  MinNdx: Integer;
+  Temp: Integer;
 begin
-  minNdx := 0;
+  MinNdx := 0;
 
-  Result := AList;
-
-  for I := 0 to Length(Result) - 1 do
+  for I := 0 to AList.Count - 1 do
   begin
-    // search the minNdx
-    minNdx := I;
+    // search the MinNdx
+    MinNdx := I;
 
-    for J := I to Length(Result) - 1 do
+    for J := I to AList.Count - 1 do
     begin
-      if (Result[J] < Result[minNdx]) then
+      if (AList[J] < AList[MinNdx]) then
       begin
-        minNdx := J;
+        MinNdx := J;
       end;
     end;
 
-    if ( Result[minNdx] < Result[I] ) then
+    if ( AList[MinNdx] < AList[I] ) then
     begin
-      WriteLn('now changing at index: ' + IntToStr(minNdx) + ' from: ' + IntToStr(Result[I]) + ' to: ' + IntToStr(Result[minNdx]));
-      temp := Result[minNdx];
-      Result[minNdx] := Result[I];
-      Result[I] := temp;
+      Temp := AList[MinNdx];
+      AList[MinNdx] := AList[I];
+      AList[I] := Temp;
     end;
-
   end;
+
+  Result := AList.AsArray;
+
 end;
 
 end.
