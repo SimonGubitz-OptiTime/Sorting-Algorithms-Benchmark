@@ -86,4 +86,10 @@ modules/
 
 # More Binaries
 **/bin/*
-src/SortingAlgorithmsBenchmark.delphilsp.json
+**/SortingAlgorithmsBenchmark.delphilsp.json
+
+# Editor
+.vscode
+
+# OS
+**/.DS_Store
