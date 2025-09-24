@@ -43,6 +43,7 @@ var
   temp: Integer;
 begin
 
+
   if ( AList.Count <= 1 ) then
   begin
     Result := AList.AsArray;
@@ -78,21 +79,27 @@ begin
 
   // 2.
   SetLength(Left, PivotNdx);
-  for Ndx := 0 to PivotNdx - 1 do
-  begin
-    Left[Ndx] := AList[Ndx];
-  end;
-
   SetLength(Right, AList.Count - PivotNdx - 1);
-  for Ndx := PivotNdx + 1 to AList.Count - 1 do
-  begin
-    Right[Ndx - PivotNdx - 1] := AList[Ndx];
-  end;
-
-  // 3.
   LeftBenchmarkArray := TBenchmarkArray.Create(Left);
   RightBenchmarkArray := TBenchmarkArray.Create(Right);
   try
+    if ( PivotNdx > 0 ) then
+    begin
+      for Ndx := 0 to PivotNdx - 1 do
+      begin
+        LeftBenchmarkArray[Ndx] := AList[Ndx];
+      end;
+    end;
+
+    if ( PivotNdx < AList.Count - 1 ) then
+    begin
+      for Ndx := PivotNdx + 1 to AList.Count - 1 do
+      begin
+        RightBenchmarkArray[Ndx - PivotNdx - 1] := AList[Ndx];
+      end;
+    end;
+
+    // 3.
     Result := concat( [Quicksort(LeftBenchmarkArray), [AList[PivotNdx]], Quicksort(RightBenchmarkArray)] );
   finally
     LeftBenchmarkArray.Free;

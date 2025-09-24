@@ -108,22 +108,25 @@ const
   AllowZero: Boolean = false;
 begin
 
-  // FillArrRandom(nums, NumLength, MaxVal, AllowZero);
-  FillArrExample(nums);
+  FillArrRandom(nums, NumLength, MaxVal, AllowZero);
+  // FillArrExample(nums);
 
   Benchmark := TBenchmark.Create;
-  WriteLn('- For ' + ArrToStr(nums));
   try
-    Benchmark.RunBenchmark(nums, Mergesort);
-    // Benchmark.DisplayResults();
-    WriteLn('-- Mergesort --');
-    WriteLn('- For ' + ArrToStr(Benchmark.Sorted));
-    WriteLn('- For ' + IntToStr(Length(nums)) + ' Elements');
-    WriteLn('- Time: ' + IntToStr(Benchmark.TimeSpent) + 'ms');
-    WriteLn('- Read Accesses:        ' + FormatToHumanReadable(Benchmark.ReadArrayAccess)  + '  Raw: ' + IntToStr(Benchmark.ReadArrayAccess));
-    WriteLn('- Write Accesses:       ' + FormatToHumanReadable(Benchmark.WriteArrayAccess) + '  Raw: ' + IntToStr(Benchmark.WriteArrayAccess));
-    WriteLn('- Total Array Accesses: ' + FormatToHumanReadable(Benchmark.TotalArrayAccess) + '  Raw: ' + IntToStr(Benchmark.TotalArrayAccess));
-  finally
-    Benchmark.Free;
+    try
+      Benchmark.RunBenchmark(nums, SelectionSort);
+      // Benchmark.DisplayResults();
+      WriteLn('-- SelectionSort --');
+      WriteLn('- For ' + IntToStr(Length(nums)) + ' Elements');
+      WriteLn('- Time: ' + IntToStr(Benchmark.TimeSpent) + 'ms');
+      WriteLn('- Read Accesses:        ' + FormatToHumanReadable(Benchmark.ReadArrayAccess)  + '  Raw: ' + IntToStr(Benchmark.ReadArrayAccess));
+      WriteLn('- Write Accesses:        ' + FormatToHumanReadable(Benchmark.WriteArrayAccess) + '  Raw: ' + IntToStr(Benchmark.WriteArrayAccess));
+      WriteLn('- Total Array Accesses: ' + FormatToHumanReadable(Benchmark.TotalArrayAccess) + '  Raw: ' + IntToStr(Benchmark.TotalArrayAccess));
+    finally
+      Benchmark.Free;
+    end;
+  except
+    on E: Exception do
+      WriteLn(E.Message);
   end;
 end.
