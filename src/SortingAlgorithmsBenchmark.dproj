@@ -127,6 +127,16 @@
             <Form>Form1</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="benchmark\clrBenchmark.pas"/>
+        <DCCReference Include="data-structures\clrBenchmarkArray.pas"/>
+        <DCCReference Include="data-structures\clrHeap.pas"/>
+        <DCCReference Include="algorithms\bubblesort\uBubblesort.pas"/>
+        <DCCReference Include="algorithms\heapsort\uHeapsort.pas"/>
+        <DCCReference Include="algorithms\insertion-sort\uInsertionSort.pas"/>
+        <DCCReference Include="algorithms\mergesort\uMergesort.pas"/>
+        <DCCReference Include="algorithms\quicksort\uQuicksort.pas"/>
+        <DCCReference Include="algorithms\selection-sort\uSelectionSort.pas"/>
+        <DCCReference Include="data-structures\uTypes.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -148,7 +158,7 @@
                     <Source Name="MainSource">SortingAlgorithmsBenchmark.dpr</Source>
                 </Source>
             </Delphi.Personality>
-            <Deployment Version="5">
+            <Deployment Version="4">
                 <DeployFile LocalName="Win32\Debug\SortingAlgorithmsBenchmark.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>SortingAlgorithmsBenchmark.exe</RemoteName>
@@ -165,6 +175,16 @@
                     </Platform>
                     <Platform Name="Win32">
                         <Operation>0</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="AndroidClasses">
+                    <Platform Name="Android">
+                        <RemoteDir>classes</RemoteDir>
+                        <Operation>64</Operation>
+                    </Platform>
+                    <Platform Name="Android64">
+                        <RemoteDir>classes</RemoteDir>
+                        <Operation>64</Operation>
                     </Platform>
                 </DeployClass>
                 <DeployClass Name="AndroidFileProvider">

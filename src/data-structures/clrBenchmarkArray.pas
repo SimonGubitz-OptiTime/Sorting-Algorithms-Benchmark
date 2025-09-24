@@ -3,7 +3,8 @@ unit clrBenchmarkArray;
 interface
 
 uses
-  Generics.Collections;
+  Generics.Collections,
+  uTypes;
 
 type
   TBenchmarkArray = class
@@ -18,8 +19,9 @@ type
 
       function  GetItem(AIndex: Integer): Integer;
       procedure SetItem(AIndex: Integer; AVal: Integer);
-
       function  GetCount(): Integer;
+
+      procedure FromArray(AList: TArray<TArrIterator>);
 
       property Count: Integer read GetCount;
       // same as https://docwiki.embarcadero.com/Libraries/Athens/de/System.Generics.Collections.TList.Items
@@ -37,7 +39,7 @@ constructor TBenchmarkArray.Create(AList: TArray<Integer>);
 begin
   inherited Create;
 
-  FItems := AList;
+  FromArray(AList);
 end;
 
 destructor TBenchmarkArray.Destroy();
@@ -60,6 +62,11 @@ end;
 function TBenchmarkArray.GetCount(): Integer;
 begin
   Result := Length(FItems);
+end;
+
+procedure TBenchmarkArray.FromArray(AList: TArray<TArrIterator>);
+begin
+  FItems := AList;
 end;
 
 end.

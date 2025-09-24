@@ -4,7 +4,7 @@ interface
 
 type
   // Determines max length
-  ArrIterator = Cardinal;
+  TArrIterator = Integer;
 
 implementation
 

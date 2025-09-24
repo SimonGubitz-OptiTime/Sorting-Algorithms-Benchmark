@@ -17,11 +17,10 @@ implementation
 // function SelectionSort(var AList: List<Integer>);
 function SelectionSort(AList: TBenchmarkArray): TArray<Integer>;
 var
-  I, J: ArrIterator;
-  MinNdx: ArrIterator;
+  I, J: TArrIterator;
+  MinNdx: TArrIterator;
   Temp: Integer;
 begin
-  MinNdx := 0;
 
   for I := 0 to AList.Count - 1 do
   begin

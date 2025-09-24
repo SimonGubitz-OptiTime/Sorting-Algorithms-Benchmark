@@ -16,7 +16,7 @@ implementation
 
 function InsertionSort(AList: TBenchmarkArray): TArray<Integer>;
 var
-  Ndx, Ndx2: ArrIterator;
+  Ndx, Ndx2: TArrIterator;
   Key: Integer;
 begin
   for Ndx := 1 to AList.Count -1  do

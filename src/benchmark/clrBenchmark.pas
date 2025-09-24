@@ -3,15 +3,16 @@ unit clrBenchmark;
 interface
 
 uses
-  SysUtils,
+  Classes,
   Generics.Collections,
+  SysUtils,
   clrBenchmarkArray;
 
 type
   TBenchmarkFn = function(ANums: TBenchmarkArray): TArray<Integer>;
   TBenchmark = class
     private
-      FTimeSpent: QWord;
+      FTimeSpent: UInt64;
       FTotalArrayAccess: UInt64;
       FReadArrayAccess: UInt64;
       FWriteArrayAccess: UInt64;
@@ -23,7 +24,7 @@ type
 
       procedure   RunBenchmark(ANums: TArray<Integer>; ABenchmarkFn: TBenchmarkFn);
 
-      property TimeSpent: QWord read FTimeSpent;
+      property TimeSpent: UInt64 read FTimeSpent;
       property Sorted: TArray<Integer> read FSortedArr;
       property TotalArrayAccess: UInt64 read FTotalArrayAccess;
       property ReadArrayAccess: UInt64 read FReadArrayAccess;
@@ -45,15 +46,15 @@ end;
 procedure TBenchmark.RunBenchmark(ANums: TArray<Integer>; ABenchmarkFn: TBenchmarkFn);
 var
   Sorted: TArray<Integer>;
-  TimeStart, TimeEnd: QWord;
+  TimeStart, TimeEnd: UInt64;
   BenchmarkArray: TBenchmarkArray;
 begin
   // Einen TBenchmarkArray erstellen
   BenchmarkArray := TBenchmarkArray.Create(ANums);
   try
-    TimeStart := GetTickCount64;
+    TimeStart := TThread.GetTickCount;
     Sorted := ABenchmarkFn(BenchmarkArray);
-    TimeEnd := GetTickCount64;
+    TimeEnd := TThread.GetTickCount;
 
     FTimeSpent := TimeEnd - TimeStart;
     FSortedArr := Sorted;

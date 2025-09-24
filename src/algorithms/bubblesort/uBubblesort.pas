@@ -16,8 +16,8 @@ implementation
 
 function Bubblesort(AList: TBenchmarkArray): TArray<Integer>;
 var
-  I, J: ArrIterator;
-  temp, Neighbor: Integer;
+  I, J: TArrIterator;
+  temp: Integer;
 begin
 
   for I := 0 to AList.Count - 1 do

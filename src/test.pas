@@ -114,9 +114,9 @@ begin
   Benchmark := TBenchmark.Create;
   try
     try
-      Benchmark.RunBenchmark(nums, SelectionSort);
+      Benchmark.RunBenchmark(nums, Mergesort);
       // Benchmark.DisplayResults();
-      WriteLn('-- SelectionSort --');
+      WriteLn('-- Mergesort --');
       WriteLn('- For ' + IntToStr(Length(nums)) + ' Elements');
       WriteLn('- Time: ' + IntToStr(Benchmark.TimeSpent) + 'ms');
       WriteLn('- Read Accesses:        ' + FormatToHumanReadable(Benchmark.ReadArrayAccess)  + '  Raw: ' + IntToStr(Benchmark.ReadArrayAccess));

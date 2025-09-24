@@ -37,7 +37,8 @@ end;
 
 function Quicksort(AList: TBenchmarkArray): TArray<Integer>;
 var
-  Ndx, PivotNdx, SwapNdx: ArrIterator;
+  Ndx, PivotNdx: TArrIterator;
+  SwapNdx: Integer;
   Left, Right: TArray<Integer>;
   RightBenchmarkArray, LeftBenchmarkArray: TBenchmarkArray;
   temp: Integer;
