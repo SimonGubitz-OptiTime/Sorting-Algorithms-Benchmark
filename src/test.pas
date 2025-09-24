@@ -11,6 +11,31 @@ uses
   uQuicksort,
   uSelectionSort;
 
+function FormatToHumanReadable(Val: Int64): string;
+var
+  Rounded: Double;
+const
+  FormatString: ShortString = '%.1f';
+begin
+  if Val >= 1000000000 then
+  begin
+    Rounded := Val / 1000000000;
+    Result := Format(string(FormatString) + ' B', [Rounded]);
+  end
+  else if Val >= 1000000 then
+  begin
+    Rounded := Val / 1000000;
+    Result := Format(string(FormatString) + ' M', [Rounded]);
+  end
+  else if Val >= 1000 then
+  begin
+    Rounded := Val / 1000;
+    Result := Format(string(FormatString) + ' K', [Rounded]);
+  end
+  else
+    Result := IntToStr(Val);
+end;
+
 function ArrToStr(AList: TArray<Integer>): String;
 var Ndx: Integer;
 begin
@@ -75,7 +100,7 @@ begin
 end;
 
 var
-  copy, bubble, nums: TArray<Integer>;
+  nums: TArray<Integer>;
   Benchmark: TBenchmark;
 const
   NumLength: Integer = 100000;
@@ -83,18 +108,21 @@ const
   AllowZero: Boolean = false;
 begin
 
-  FillArrRandom(nums, NumLength, MaxVal, AllowZero);
+  // FillArrRandom(nums, NumLength, MaxVal, AllowZero);
+  FillArrExample(nums);
 
   Benchmark := TBenchmark.Create;
+  WriteLn('- For ' + ArrToStr(nums));
   try
-    Benchmark.RunBenchmark(nums, Bubblesort);
+    Benchmark.RunBenchmark(nums, Mergesort);
     // Benchmark.DisplayResults();
-    WriteLn('-- Bubblesort --');
+    WriteLn('-- Mergesort --');
+    WriteLn('- For ' + ArrToStr(Benchmark.Sorted));
     WriteLn('- For ' + IntToStr(Length(nums)) + ' Elements');
     WriteLn('- Time: ' + IntToStr(Benchmark.TimeSpent) + 'ms');
-    WriteLn('- Read Accesses: ' + IntToStr(Benchmark.ReadArrayAccess));
-    WriteLn('- Write Accesses: ' + IntToStr(Benchmark.WriteArrayAccess));
-    WriteLn('- Total Array Accesses: ' + IntToStr(Benchmark.TotalArrayAccess));
+    WriteLn('- Read Accesses:        ' + FormatToHumanReadable(Benchmark.ReadArrayAccess)  + '  Raw: ' + IntToStr(Benchmark.ReadArrayAccess));
+    WriteLn('- Write Accesses:       ' + FormatToHumanReadable(Benchmark.WriteArrayAccess) + '  Raw: ' + IntToStr(Benchmark.WriteArrayAccess));
+    WriteLn('- Total Array Accesses: ' + FormatToHumanReadable(Benchmark.TotalArrayAccess) + '  Raw: ' + IntToStr(Benchmark.TotalArrayAccess));
   finally
     Benchmark.Free;
   end;

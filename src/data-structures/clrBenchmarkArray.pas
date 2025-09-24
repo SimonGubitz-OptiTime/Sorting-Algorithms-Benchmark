@@ -9,10 +9,8 @@ type
   TBenchmarkArray = class
     private
       FItems: TArray<Integer>;
-      FReadAccess: UInt64;
-      FWriteAccess: UInt64;
-
-      procedure ResetAccessCounters();
+      class var FReadAccess: UInt64;
+      class var FWriteAccess: UInt64;
 
     public
       constructor Create(AList: TArray<Integer>);
@@ -28,8 +26,8 @@ type
       property Items[Index: Integer]: Integer read GetItem write SetItem; default;
       property AsArray: TArray<Integer> read FItems;
 
-      property ReadAccess: UInt64 read FReadAccess;
-      property WriteAccess: UInt64 read FWriteAccess;
+      class property ReadAccess: UInt64 read FReadAccess;
+      class property WriteAccess: UInt64 read FWriteAccess;
   end;
 
 
@@ -40,7 +38,6 @@ begin
   inherited Create;
 
   FItems := AList;
-  ResetAccessCounters();
 end;
 
 destructor TBenchmarkArray.Destroy();
@@ -48,21 +45,15 @@ begin
   inherited Free;
 end;
 
-procedure TBenchmarkArray.ResetAccessCounters();
-begin
-  FReadAccess := 0;
-  FWriteAccess := 0;
-end;
-
 function TBenchmarkArray.GetItem(AIndex: Integer): Integer;
 begin
-  Inc(FReadAccess);
+  Inc(TBenchmarkArray.FReadAccess);
   Result := FItems[AIndex];
 end;
 
 procedure TBenchmarkArray.SetItem(AIndex: Integer; AVal: Integer);
 begin
-  Inc(FWriteAccess);
+  Inc(TBenchmarkArray.FWriteAccess);
   FItems[AIndex] := AVal;
 end;
 

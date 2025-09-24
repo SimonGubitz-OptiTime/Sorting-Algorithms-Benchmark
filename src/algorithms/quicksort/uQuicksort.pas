@@ -6,7 +6,8 @@ uses
   Generics.Collections,
   Math,
   SysUtils,
-  clrBenchmarkArray;
+  clrBenchmarkArray,
+  uTypes;
 
 function concat(AConcatList: TArray<TArray<Integer>>): TArray<Integer>;
 function Quicksort(AList: TBenchmarkArray): TArray<Integer>;
@@ -36,10 +37,10 @@ end;
 
 function Quicksort(AList: TBenchmarkArray): TArray<Integer>;
 var
-  I, Pivot: Integer;
+  Ndx, PivotNdx, SwapNdx: ArrIterator;
   Left, Right: TArray<Integer>;
   RightBenchmarkArray, LeftBenchmarkArray: TBenchmarkArray;
-  temp, swap: Integer;
+  temp: Integer;
 begin
 
   if ( AList.Count <= 1 ) then
@@ -48,48 +49,51 @@ begin
     Exit;
   end;
 
-  // Pivot := AList[Floor(High(AList) / 2)];
-  Pivot := AList.Count - 1;
+  // PivotNdx := AList[Floor(High(AList) / 2)];
+  PivotNdx := AList.Count - 1;
 
-  // 1. Mit Pivot Sortieren
+  // 1. Mit PivotNdx Sortieren
   // 2. In > & < Gruppen aufteilen (Partitionieren)
-  // 3. Rekursiv diese Gruppen mit dessen Pivot sortieren
+  // 3. Rekursiv diese Gruppen mit dessen PivotNdx sortieren
 
   // 1.
-  swap := -1;
-  for I := 0 to AList.Count - 1 do
+  SwapNdx := -1;
+  for Ndx := 0 to AList.Count - 1 do
   begin
-    if ( AList[I] < AList[Pivot] ) then
+    if ( AList[Ndx] < AList[PivotNdx] ) then
     begin
-      Inc(swap);
-      temp := AList[I];
-      AList[I] := AList[swap];
-      AList[swap] := temp;
+      Inc(SwapNdx);
+      temp := AList[Ndx];
+      AList[Ndx] := AList[SwapNdx];
+      AList[SwapNdx] := temp;
     end;
   end;
 
-  // swap the pivot
-  Inc(swap);
-  temp := AList[Pivot];
-  AList[Pivot] := AList[swap];
-  AList[swap] := temp;
-  Pivot := swap;
+  // SwapNdx the PivotNdx
+  Inc(SwapNdx);
+  temp := AList[PivotNdx];
+  AList[PivotNdx] := AList[SwapNdx];
+  AList[SwapNdx] := temp;
+  PivotNdx := SwapNdx;
 
   // 2.
-  SetLength(Left, Pivot); // pivot excluded
-  for I := 0 to Pivot - 1 do
-    Left[I] := AList[I];
+  SetLength(Left, PivotNdx);
+  for Ndx := 0 to PivotNdx - 1 do
+  begin
+    Left[Ndx] := AList[Ndx];
+  end;
 
-  // Right (elements after pivot)
-  SetLength(Right, AList.Count - Pivot - 1); // pivot excluded
-  for I := Pivot + 1 to AList.Count - 1 do
-    Right[I - Pivot - 1] := AList[I]; // shift index to 0
+  SetLength(Right, AList.Count - PivotNdx - 1);
+  for Ndx := PivotNdx + 1 to AList.Count - 1 do
+  begin
+    Right[Ndx - PivotNdx - 1] := AList[Ndx];
+  end;
 
   // 3.
   LeftBenchmarkArray := TBenchmarkArray.Create(Left);
   RightBenchmarkArray := TBenchmarkArray.Create(Right);
   try
-    Result := concat( [Quicksort(LeftBenchmarkArray), [AList[Pivot]], Quicksort(RightBenchmarkArray)] );
+    Result := concat( [Quicksort(LeftBenchmarkArray), [AList[PivotNdx]], Quicksort(RightBenchmarkArray)] );
   finally
     LeftBenchmarkArray.Free;
     RightBenchmarkArray.Free;

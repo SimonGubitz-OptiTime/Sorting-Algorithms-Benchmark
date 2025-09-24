@@ -5,7 +5,8 @@ interface
 uses
   SysUtils,
   Generics.Collections,
-  clrBenchmarkArray;
+  clrBenchmarkArray,
+  uTypes;
 
 
 // procedure InsertionSort(var AList: TArray<Integer>);
@@ -15,21 +16,22 @@ implementation
 
 function InsertionSort(AList: TBenchmarkArray): TArray<Integer>;
 var
-  Ndx, key, j: Integer;
+  Ndx, Ndx2: ArrIterator;
+  Key: Integer;
 begin
   for Ndx := 1 to AList.Count -1  do
   begin
-    key := AList[Ndx];
-    j := Ndx - 1;
+    Key := AList[Ndx];
+    Ndx2 := Ndx - 1;
 
-    while ( (j >= 0)
-      and (key < AList[j]) ) do
+    while ( (Ndx2 >= 0)
+      and (Key < AList[Ndx2]) ) do
     begin
-      AList[j + 1] := AList[j];
-      j := j - 1;
+      AList[Ndx2 + 1] := AList[Ndx2];
+      Ndx2 := Ndx2 - 1;
     end;
 
-    AList[j + 1] := key;
+    AList[Ndx2 + 1] := Key;
   end;
 
   Result := AList.AsArray;

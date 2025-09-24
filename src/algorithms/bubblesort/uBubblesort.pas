@@ -3,9 +3,10 @@ unit uBubblesort;
 interface
 
 uses
-  SysUtils,
   Generics.Collections,
-  clrBenchmarkArray;
+  SysUtils,
+  clrBenchmarkArray,
+  uTypes;
 
 
 // function Bubblesort(var AList: List<Integer>);
@@ -15,7 +16,8 @@ implementation
 
 function Bubblesort(AList: TBenchmarkArray): TArray<Integer>;
 var
-  I, J, temp, Neighbor: Integer;
+  I, J: ArrIterator;
+  temp, Neighbor: Integer;
 begin
 
   for I := 0 to AList.Count - 1 do

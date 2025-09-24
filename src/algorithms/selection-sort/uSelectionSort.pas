@@ -5,7 +5,8 @@ interface
 uses
   SysUtils,
   Generics.Collections,
-  clrBenchmarkArray;
+  clrBenchmarkArray,
+  uTypes;
 
 
 // function SelectionSort(var AList: List<Integer>);
@@ -16,8 +17,8 @@ implementation
 // function SelectionSort(var AList: List<Integer>);
 function SelectionSort(AList: TBenchmarkArray): TArray<Integer>;
 var
-  I, J: Integer;
-  MinNdx: Integer;
+  I, J: ArrIterator;
+  MinNdx: ArrIterator;
   Temp: Integer;
 begin
   MinNdx := 0;
