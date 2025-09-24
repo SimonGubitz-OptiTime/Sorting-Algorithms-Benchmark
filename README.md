@@ -10,11 +10,11 @@
 ## Implementierte Algorithmen
 
 - [x] bubblesort
-- [x] selection-sort
-- [x] insertion-sort
 - [ ] heapsort
-- [ ] mergesort
+- [x] insertion-sort
+- [x] mergesort
 - [x] quicksort
+- [x] selection-sort
 
 ## Wie kann man es ausführen?
 
