@@ -15,3 +15,17 @@
 - [ ] heapsort
 - [ ] mergesort
 - [x] quicksort
+
+
+## Wie kann man es ausführen?
+
+### Option 1
+
+`test` in der CLI mit [FPC](https://www.freepascal.org)
+
+1. `make`
+2. `./bin/test`
+
+### Option 2
+
+`Main` mit Delphi und der Embarcadero RAD Studio

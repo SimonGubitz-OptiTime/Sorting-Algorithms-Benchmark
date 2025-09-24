@@ -78,20 +78,18 @@ var
   copy, bubble, nums: TArray<Integer>;
   Benchmark: TBenchmark;
 const
-  NumLength: Integer = 10000;
+  NumLength: Integer = 100000;
   MaxVal: Integer = 100;
   AllowZero: Boolean = false;
 begin
 
   FillArrRandom(nums, NumLength, MaxVal, AllowZero);
-  bubble := nums;
-  copy := nums;
 
   Benchmark := TBenchmark.Create;
   try
-    Benchmark.RunBenchmark(nums, Quicksort);
+    Benchmark.RunBenchmark(nums, Bubblesort);
     // Benchmark.DisplayResults();
-    WriteLn('-- Quicksort --');
+    WriteLn('-- Bubblesort --');
     WriteLn('- For ' + IntToStr(Length(nums)) + ' Elements');
     WriteLn('- Time: ' + IntToStr(Benchmark.TimeSpent) + 'ms');
     WriteLn('- Read Accesses: ' + IntToStr(Benchmark.ReadArrayAccess));
