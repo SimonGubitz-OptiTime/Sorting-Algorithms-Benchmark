@@ -18,21 +18,25 @@ function concat(AConcatList: TArray<TArray<Integer>>): TArray<Integer>;
 var
   Ndx, Ndx2, TotalLength, Pos: Integer;
 begin
-  // First, calculate the total length of the resulting array
+  Result := nil;
+
   TotalLength := 0;
   for Ndx := 0 to Length(AConcatList) - 1 do
+  begin
     Inc(TotalLength, Length(AConcatList[Ndx]));
+  end;
 
   SetLength(Result, TotalLength);
 
-  // Fill the result array
   Pos := 0;
   for Ndx := 0 to Length(AConcatList) - 1 do
+  begin
     for Ndx2 := 0 to Length(AConcatList[Ndx]) - 1 do
     begin
       Result[Pos] := AConcatList[Ndx][Ndx2];
       Inc(Pos);
     end;
+  end;
 end;
 
 function Quicksort(AList: TBenchmarkArray): TArray<Integer>;

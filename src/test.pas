@@ -11,31 +11,6 @@ uses
   uQuicksort,
   uSelectionSort;
 
-function FormatToHumanReadable(Val: Int64): string;
-var
-  Rounded: Double;
-const
-  FormatString: ShortString = '%.1f';
-begin
-  if Val >= 1000000000 then
-  begin
-    Rounded := Val / 1000000000;
-    Result := Format(string(FormatString) + ' B', [Rounded]);
-  end
-  else if Val >= 1000000 then
-  begin
-    Rounded := Val / 1000000;
-    Result := Format(string(FormatString) + ' M', [Rounded]);
-  end
-  else if Val >= 1000 then
-  begin
-    Rounded := Val / 1000;
-    Result := Format(string(FormatString) + ' K', [Rounded]);
-  end
-  else
-    Result := IntToStr(Val);
-end;
-
 function ArrToStr(AList: TArray<Integer>): String;
 var Ndx: Integer;
 begin
@@ -78,50 +53,23 @@ begin
   AList[8] := 5;
 end;
 
-function concat(AConcatList: TArray<TArray<Integer>>): TArray<Integer>;
-var
-  Ndx, Ndx2, TotalLength, Pos: Integer;
-begin
-  // First, calculate the total length of the resulting array
-  TotalLength := 0;
-  for Ndx := 0 to Length(AConcatList) - 1 do
-    Inc(TotalLength, Length(AConcatList[Ndx]));
-
-  SetLength(Result, TotalLength);
-
-  // Fill the result array
-  Pos := 0;
-  for Ndx := 0 to Length(AConcatList) - 1 do
-    for Ndx2 := 0 to Length(AConcatList[Ndx]) - 1 do
-    begin
-      Result[Pos] := AConcatList[Ndx][Ndx2];
-      Inc(Pos);
-    end;
-end;
-
 var
   nums: TArray<Integer>;
   Benchmark: TBenchmark;
 const
-  NumLength: Integer = 100000;
+  NumLength: Integer = 150000;
   MaxVal: Integer = 100;
   AllowZero: Boolean = false;
 begin
 
-  FillArrRandom(nums, NumLength, MaxVal, AllowZero);
   // FillArrExample(nums);
+  FillArrRandom(nums, NumLength, MaxVal, AllowZero);
 
   Benchmark := TBenchmark.Create;
   try
     try
-      Benchmark.RunBenchmark(nums, Mergesort);
-      // Benchmark.DisplayResults();
-      WriteLn('-- Mergesort --');
-      WriteLn('- For ' + IntToStr(Length(nums)) + ' Elements');
-      WriteLn('- Time: ' + IntToStr(Benchmark.TimeSpent) + 'ms');
-      WriteLn('- Read Accesses:        ' + FormatToHumanReadable(Benchmark.ReadArrayAccess)  + '  Raw: ' + IntToStr(Benchmark.ReadArrayAccess));
-      WriteLn('- Write Accesses:        ' + FormatToHumanReadable(Benchmark.WriteArrayAccess) + '  Raw: ' + IntToStr(Benchmark.WriteArrayAccess));
-      WriteLn('- Total Array Accesses: ' + FormatToHumanReadable(Benchmark.TotalArrayAccess) + '  Raw: ' + IntToStr(Benchmark.TotalArrayAccess));
+      Benchmark.RunBenchmark(nums, Quicksort);
+      Benchmark.DisplayResults('Quicksort');
     finally
       Benchmark.Free;
     end;

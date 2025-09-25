@@ -18,11 +18,15 @@ type
       FWriteArrayAccess: UInt64;
       FSortedArr: TArray<Integer>;
 
+      function RepeatStr(AStr: String; ATimes: Integer): String; inline;
+      function FormatToHumanReadable(Val: Int64): String;
+
     public
       constructor Create();
-      destructor Destroy();
+      destructor  Destroy();
 
       procedure   RunBenchmark(ANums: TArray<Integer>; ABenchmarkFn: TBenchmarkFn);
+      procedure   DisplayResults(AName: String);
 
       property TimeSpent: UInt64 read FTimeSpent;
       property Sorted: TArray<Integer> read FSortedArr;
@@ -43,6 +47,44 @@ begin
   inherited Free;
 end;
 
+function TBenchmark.RepeatStr(AStr: String; ATimes: Integer): String;
+var
+  Ndx: Integer;
+begin
+
+  Result := '';
+
+  for Ndx := 0 to ATimes do
+  begin
+    Result := Result + AStr[Ndx];
+  end;
+end;
+
+function TBenchmark.FormatToHumanReadable(Val: Int64): String;
+var
+  Rounded: Double;
+const
+  FormatString: ShortString = '%.1f';
+begin
+  if Val >= 1000000000 then
+  begin
+    Rounded := Val / 1000000000;
+    Result := Format(String(FormatString) + ' B', [Rounded]);
+  end
+  else if Val >= 1000000 then
+  begin
+    Rounded := Val / 1000000;
+    Result := Format(String(FormatString) + ' M', [Rounded]);
+  end
+  else if Val >= 1000 then
+  begin
+    Rounded := Val / 1000;
+    Result := Format(String(FormatString) + ' K', [Rounded]);
+  end
+  else
+    Result := IntToStr(Val);
+end;
+
 procedure TBenchmark.RunBenchmark(ANums: TArray<Integer>; ABenchmarkFn: TBenchmarkFn);
 var
   Sorted: TArray<Integer>;
@@ -52,9 +94,9 @@ begin
   // Einen TBenchmarkArray erstellen
   BenchmarkArray := TBenchmarkArray.Create(ANums);
   try
-    TimeStart := TThread.GetTickCount;
+    TimeStart := TThread.GetTickCount64;
     Sorted := ABenchmarkFn(BenchmarkArray);
-    TimeEnd := TThread.GetTickCount;
+    TimeEnd := TThread.GetTickCount64;
 
     FTimeSpent := TimeEnd - TimeStart;
     FSortedArr := Sorted;
@@ -64,6 +106,28 @@ begin
   finally
     BenchmarkArray.Free;
   end;
+end;
+
+procedure TBenchmark.DisplayResults(AName: String);
+var
+  max_length: Integer;
+  ReadStr, WriteStr, TotalStr: String;
+begin
+  WriteLn('-- ' + AName + ' --');
+  WriteLn('- For ' + IntToStr(Length(Sorted)) + ' Elements');
+  WriteLn('- Time: ' + IntToStr(TimeSpent) + 'ms');
+
+  // ↓ Indenting properly
+  ReadStr := FormatToHumanReadable(ReadArrayAccess);
+  WriteStr := FormatToHumanReadable(WriteArrayAccess);
+  TotalStr := FormatToHumanReadable(TotalArrayAccess);
+  max_length := Length(TotalStr);
+
+  WriteLn('- Read Accesses:        ' + RepeatStr(' ', max_length - Length(ReadStr))   + ReadStr  + '  Raw: ' + IntToStr(ReadArrayAccess));
+  WriteLn('- Write Accesses:       ' + RepeatStr(' ', max_length - Length(WriteStr))  + WriteStr + '  Raw: ' + IntToStr(WriteArrayAccess));
+  WriteLn('- Total Array Accesses: ' + RepeatStr(' ', max_length - Length(TotalStr))  + TotalStr + '  Raw: ' + IntToStr(TotalArrayAccess));
+
+
 end;
 
 
