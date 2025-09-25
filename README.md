@@ -22,8 +22,7 @@
 
 `test` in der CLI mit [FPC](https://www.freepascal.org)
 
-1. `make`
-2. `./bin/test`
+`make run`
 
 ### Option 2
 
