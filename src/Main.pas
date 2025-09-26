@@ -90,20 +90,23 @@ const
   AllowZero: Boolean = false;
 begin
 
-//  FillArrRandom(nums, NumLength, MaxVal, AllowZero);
-   FillArrExample(nums);
+  FillArrExample(nums);
+  // FillArrRandom(nums, NumLength, MaxVal, AllowZero);
+
+  Heap := THeap.heapify(nums);
+  ShowMessage(ArrToStr(Heap.AsArray));
 
   Benchmark := TBenchmark.Create;
   try
     try
-      Benchmark.RunBenchmark(nums, Mergesort);
-      // Benchmark.DisplayResults();
+      Benchmark.RunBenchmark(nums, Quicksort);
+      // Benchmark.DisplayResults('Quicksort');
     finally
       Benchmark.Free;
     end;
   except
     on E: Exception do
-      WriteLn(E.Message);
+      ShowMessage('Error: ' + E.Message);
   end;
 end;
 
