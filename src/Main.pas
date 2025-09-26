@@ -13,6 +13,7 @@ uses
   Vcl.StdCtrls,
   Winapi.Messages,
   Winapi.Windows,
+  clrHeap,
   clrBenchmark,
   uBubblesort,
   uHeapsort,
@@ -84,6 +85,7 @@ procedure TForm1.Button1Click(Sender: TObject);
 var
   nums: TArray<Integer>;
   Benchmark: TBenchmark;
+  Heap: THeap;
 const
   NumLength: Integer = 100000;
   MaxVal: Integer = 100;

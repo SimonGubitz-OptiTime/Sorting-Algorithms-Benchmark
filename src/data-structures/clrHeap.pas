@@ -3,7 +3,8 @@ unit clrHeap;
 interface
 
 uses
-  SysUtils;
+  SysUtils,
+  Vcl.Dialogs;
 
 type
   THeapType = (MAX_HEAP, MIN_HEAP);
@@ -38,9 +39,9 @@ implementation
 
 constructor THeap.Create(AFirstVal: Integer; AType: THeapType = THeapType.MAX_HEAP);
 begin
-  FSize := 0;
+  FSize := 1;
 
-  SetLength(FItems, 2);
+  SetLength(FItems, 1);
   FItems[0] := AFirstVal;
 
   inherited Create;
@@ -55,6 +56,7 @@ class function THeap.heapify(AList: TArray<Integer>; AType: THeapType = THeapTyp
 var
   Ndx: Integer;
   max_val: Integer;
+  Ndx2: Integer;
 begin
   max_val := 0;
 
@@ -69,11 +71,28 @@ begin
       end;
     end;
 
+    // Remove max_val from the List
+    for Ndx := 0 to Length(AList) - 1 do
+    begin
+      if ( AList[Ndx] = max_val ) then
+      begin
+
+        for Ndx2 := Ndx + 1 to Length(AList) - 1 do
+        begin
+          AList[Ndx2 - 1] := AList[Ndx2];
+        end;
+
+        SetLength(AList, Length(AList)-1);
+        break;
+      end;
+    end;
+
+
     Result := THeap.Create(max_val); // 9
 
     for Ndx := 1 to Length(AList) - 1 do
     begin
-      Result.AddNode(AList[Ndx]);
+      Result.AddNode(AList[Ndx]); //
     end;
 
   end;
@@ -83,34 +102,35 @@ procedure THeap.AddNode(ANodeVal: Integer);
 var
   Ndx: Integer;
   temp: Integer;
+  FoundPlace: Boolean;
 begin
-  Inc(FSize);
-  SetLength(FItems, FSize); // siehe IncreaseTable.md
 
-  WriteLn('Adding: ' + IntToStr(ANodeVal));
+  FoundPlace := false;
+
 
   Ndx := 0;
   // TODO: Change dependant on Type max or min-heap
-  while ( ( Ndx < FSize )
-      and (  ( ANodeVal < FItems[Ndx] )
-          or ( ANodeVal < FItems[Ndx + 1] ) ) ) do
+  while ( Ndx < FSize ) do
   begin
     if ( ANodeVal > FItems[Ndx] ) then
     begin
-      WriteLn(IntToStr(Ndx) + '. Switching ' + IntToStr(FItems[Ndx]) + ' and ' + IntToStr(ANodeVal));
-      temp := FItems[Ndx];
-      FItems[Ndx] := ANodeVal;
-      AddNode(temp);
-    end
-    else if ( ANodeVal > FItems[Ndx + 1] ) then
-    begin
-      WriteLn(IntToStr(Ndx) + '. Switching ' + IntToStr(FItems[Ndx + 1]) + ' and ' + IntToStr(ANodeVal));
-      temp := FItems[Ndx];
-      FItems[Ndx] := ANodeVal;
-      AddNode(temp);
-    end;
 
+      ShowMessage(IntToStr(Ndx) + '. Switching ' + IntToStr(FItems[Ndx]) + ' and ' + IntToStr(ANodeVal));
+      temp := FItems[Ndx];
+      FItems[Ndx] := ANodeVal;
+      AddNode(temp);
+
+      FoundPlace := true;
+      break;
+    end;
     Inc(Ndx);
+  end;
+
+  if ( not(FoundPlace) ) then
+  begin
+    Inc(FSize);
+    SetLength(FItems, FSize);
+    FItems[High(FItems)] := ANodeVal;
   end;
 
   // Last := ANodeVal;
