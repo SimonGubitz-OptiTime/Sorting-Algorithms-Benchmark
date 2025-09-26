@@ -4,6 +4,7 @@ interface
 
 uses
   Generics.Collections,
+  SysUtils,
   uTypes;
 
 type
@@ -49,12 +50,20 @@ end;
 
 function TBenchmarkArray.GetItem(AIndex: Integer): Integer;
 begin
+
+  if ( AIndex >= Length(FItems) ) then
+    raise ERangeError.CreateFmt('Trying to Get out of bounds in TBenchmarkArray. Length: %d, Requested Get on Index: %d.', [ Length(FItems), AIndex ]);
+
   Inc(TBenchmarkArray.FReadAccess);
   Result := FItems[AIndex];
 end;
 
 procedure TBenchmarkArray.SetItem(AIndex: Integer; AVal: Integer);
 begin
+
+  if ( AIndex >= Length(FItems) ) then
+    raise ERangeError.CreateFmt('Trying to Set out of bounds in TBenchmarkArray. Length: %d, Requested Set on Index: %d.', [ Length(FItems), AIndex ]);
+
   Inc(TBenchmarkArray.FWriteAccess);
   FItems[AIndex] := AVal;
 end;

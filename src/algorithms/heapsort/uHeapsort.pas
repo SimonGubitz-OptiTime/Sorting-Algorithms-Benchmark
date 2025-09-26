@@ -4,14 +4,19 @@ interface
 
 uses
   Generics.Collections,
-  clrBenchmarkArray;
+  clrBenchmarkArray,
+  clrHeap;
 
 function Heapsort(AList: TBenchmarkArray): TArray<Integer>;
 
 implementation
 
 function Heapsort(AList: TBenchmarkArray): TArray<Integer>;
+var
+  Heap: THeap;
 begin
+
+  Heap := THeap.heapify(AList.AsArray);
 
 end;
 

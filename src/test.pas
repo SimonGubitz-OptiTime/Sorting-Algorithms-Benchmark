@@ -4,6 +4,7 @@ uses
   Generics.Collections,
   SysUtils,
   clrBenchmark,
+  clrHeap,
   uBubblesort,
   uHeapsort,
   uInsertionSort,
@@ -56,14 +57,21 @@ end;
 var
   nums: TArray<Integer>;
   Benchmark: TBenchmark;
+  Heap: THeap;
 const
   NumLength: Integer = 150000;
   MaxVal: Integer = 100;
   AllowZero: Boolean = false;
 begin
 
-  // FillArrExample(nums);
-  FillArrRandom(nums, NumLength, MaxVal, AllowZero);
+  FillArrExample(nums);
+  // FillArrRandom(nums, NumLength, MaxVal, AllowZero);
+
+
+  Heap := THeap.heapify(nums);
+  WriteLn(ArrToStr(Heap.AsArray));
+
+
 
   Benchmark := TBenchmark.Create;
   try
