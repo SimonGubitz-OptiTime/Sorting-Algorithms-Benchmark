@@ -72,6 +72,7 @@
 *.tvsconfig
 *.dsk
 *.dsv
+**/SortingAlgorithmsBenchmark.delphilsp.json
 
 # Delphi history and backups
 __history/
@@ -86,7 +87,6 @@ modules/
 
 # More Binaries
 **/bin/*
-**/SortingAlgorithmsBenchmark.delphilsp.json
 
 # Editor
 .vscode

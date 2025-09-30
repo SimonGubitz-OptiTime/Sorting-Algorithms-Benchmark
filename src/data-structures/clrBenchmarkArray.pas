@@ -16,7 +16,7 @@ type
 
     public
       constructor Create(AList: TArray<Integer>);
-      destructor Destroy();
+      destructor Destroy(); reintroduce;
 
       function  GetItem(AIndex: Integer): Integer;
       procedure SetItem(AIndex: Integer; AVal: Integer);

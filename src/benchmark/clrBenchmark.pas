@@ -118,7 +118,7 @@ var
   max_length: Integer;
   ReadStr, WriteStr, TotalStr: String;
 begin
-  WriteLn('-- ' + FAlgoName + ' --');
+  WriteLn('-- ' + AName + ' --');
   WriteLn('- For ' + IntToStr(Length(Sorted)) + ' Elements');
   WriteLn('- Time: ' + IntToStr(TimeSpent) + 'ms');
 

@@ -13,22 +13,29 @@ type
     private
       FSize: Integer;
       FItems: TBenchmarkArray;
+      FHeapType: THeapType;
 
+      const nil_symbolizer: Integer = -12983;
 
-      function GetParentIndex(ANdx: Integer): Integer;
-      function GetLeftIndex(ANdx: Integer): Integer;
-      function GetRightIndex(ANdx: Integer): Integer;
+      function  GetParentIndex(ANdx: Integer): Integer;
+      function  GetLeftIndex(ANdx: Integer): Integer;
+      function  GetRightIndex(ANdx: Integer): Integer;
 
     public
       constructor Create(AList: TArray<Integer>; AType: THeapType = THeapType.MAX_HEAP); overload;
       constructor Create(AList: TBenchmarkArray; AType: THeapType = THeapType.MAX_HEAP); overload;
-      destructor  Destroy();
+      destructor  Destroy(); reintroduce;
 
-      procedure heapify(AList: TBenchmarkArray; ASize: Integer; ANdx: Integer; AType: THeapType = THeapType.MAX_HEAP);
+      procedure Swap(ANdx1, ANdx2: Integer);
+      procedure SiftDown(ASize: Integer; ANdx: Integer; AType: THeapType = THeapType.MAX_HEAP);
+      // procedure SiftUp(AList: TBenchmarkArray);
+
+
       function  GetAsArray():  TArray<Integer>;
 
       property Size: Integer read FSize;
       property AsArray: TArray<Integer> read GetAsArray;
+      property HeapType: THeapType read FHeapType;
   end;
 
 implementation
@@ -37,11 +44,12 @@ constructor THeap.Create(AList: TArray<Integer>; AType: THeapType = THeapType.MA
 var
   Ndx: Integer;
 begin
+  FHeapType := AType;
   FItems := TBenchmarkArray.Create([]);
   FSize := Length(AList) + 1;
   FItems.SetCapacity(FSize);
-  FItems[0] := 0;
-  for Ndx := 1 to FSize -1 do
+  FItems[0] := nil_symbolizer; // so the root is at 1 and the
+  for Ndx := 1 to FSize - 1 do
   begin
     FItems[Ndx] := AList[Ndx - 1];
   end;
@@ -50,7 +58,7 @@ begin
   // leaves -> arr[Floor(size/2) + 1] to arr[size]
   for Ndx := Floor(FSize/2) downto 1 do // ignore the leaves
   begin
-    heapify(FItems, FSize, Ndx);
+    SiftDown(FSize, Ndx);
   end;
 
   inherited Create;
@@ -60,6 +68,7 @@ constructor THeap.Create(AList: TBenchmarkArray; AType: THeapType = THeapType.MA
 var
   Ndx: Integer;
 begin
+  FHeapType := AType;
   FItems := TBenchmarkArray.Create([]);
   FSize := AList.Count + 1;
   FItems.SetCapacity(FSize);
@@ -73,7 +82,7 @@ begin
   // leaves -> arr[Floor(size/2) + 1] to arr[size]
   for Ndx := Floor(FSize/2) downto 1 do // ignore the leaves
   begin
-    heapify(FItems, FSize, Ndx);
+    SiftDown(FSize, Ndx);
   end;
 
   inherited Create;
@@ -84,38 +93,40 @@ begin
   inherited Destroy;
 end;
 
-procedure THeap.heapify(AList: TBenchmarkArray; ASize: Integer; ANdx: Integer; AType: THeapType = THeapType.MAX_HEAP);
+procedure THeap.Swap(ANdx1, ANdx2: Integer);
 var
-  Ndx: Integer;
-  l, r, largest: Integer;
-  size: Integer;
   temp: Integer;
 begin
+  temp := FItems[ANdx1];
+  FItems[ANdx1] := FItems[ANdx2];
+  FItems[ANdx2] := temp;
+end;
 
-  size := AList.Count - 1;
+procedure THeap.SiftDown(ASize: Integer; ANdx: Integer; AType: THeapType = THeapType.MAX_HEAP);
+var
+  l, r, largest: Integer;
+begin
+
   l := GetLeftIndex(ANdx);
   r := GetRightIndex(ANdx);
   largest := ANdx;
 
-  if ( (l < size)
-    and (AList[l] > AList[ANdx]) ) then
+  if ( (l < ASize)
+    and (FItems[l] > FItems[ANdx]) ) then
   begin
     largest := l;
   end;
 
-  if ( (r < size)
-    and (AList[r] > AList[largest]) ) then
+  if ( (r < ASize)
+    and (FItems[r] > FItems[largest]) ) then
   begin
     largest := r;
   end;
 
   if ( largest <> ANdx ) then
   begin
-    temp := AList[ANdx];
-    AList[ANdx] := AList[largest];
-    AList[largest] := temp;
-
-    heapify(AList, size, largest, AType);
+    Swap(ANdx, largest);
+    SiftDown(ASize, largest, AType);
   end;
 
 end;
@@ -136,8 +147,19 @@ begin
 end;
 
 function THeap.GetAsArray(): TArray<Integer>;
+var
+  Ndx, Ndx2: Integer;
 begin
-  Result := Copy(FItems.AsArray, 1, FItems.Count - 1);
+  Ndx2 := 0;
+  SetLength(Result, FItems.Count - 1);
+  for Ndx := 0 to Length(Result) - 1 do
+  begin
+    if ( FItems[Ndx] <> nil_symbolizer ) then
+    begin
+      Result[Ndx2] := FItems[Ndx];
+      Inc(Ndx2);
+    end;
+  end;
 end;
 
 
