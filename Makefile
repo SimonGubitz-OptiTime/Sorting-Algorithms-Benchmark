@@ -11,6 +11,7 @@ SRC = src/test.pas
 UNIT_PATHS = \
     -Fu"src/data-structures" \
     -Fu"src/benchmark" \
+    -Fu"src/utils" \
     -Fu"src/algorithms/bubblesort" \
     -Fu"src/algorithms/heapsort" \
     -Fu"src/algorithms/insertion-sort" \
@@ -27,7 +28,8 @@ all:
 
 # Clean compiled files
 clean:
-	rm -f $(OUTDIR)/*.o $(OUTDIR)/*.ppu $(OUTDIR)/test
+	rm -f $(OUTDIR)/*.o $(OUTDIR)/*.ppu $(OUTDIR)/*.dcu $(OUTDIR)/*.exe $(OUTDIR)/test
+    rm -rf $(OUTDIR)/Win32/ $(OUTDIR)/Win64/
 
 # Run the program
 run: all

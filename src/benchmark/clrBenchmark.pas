@@ -1,4 +1,4 @@
-unit clrBenchmark;
+﻿unit clrBenchmark;
 
 interface
 
@@ -6,7 +6,8 @@ uses
   Classes,
   Generics.Collections,
   SysUtils,
-  clrBenchmarkArray;
+  clrBenchmarkArray,
+  uStrUtils;
 
 type
   TBenchmarkFn = function(ANums: TBenchmarkArray): TArray<Integer>;
@@ -18,12 +19,9 @@ type
       FWriteArrayAccess: UInt64;
       FSortedArr: TArray<Integer>;
 
-      function RepeatStr(AStr: String; ATimes: Integer): String; inline;
-      function FormatToHumanReadable(Val: Int64): String;
-
     public
       constructor Create();
-      destructor  Destroy();
+      destructor  Destroy(); reintroduce;
 
       procedure   RunBenchmark(ANums: TArray<Integer>; ABenchmarkFn: TBenchmarkFn);
       procedure   DisplayResults(AName: String);
@@ -45,44 +43,6 @@ end;
 destructor TBenchmark.Destroy();
 begin
   inherited Free;
-end;
-
-function TBenchmark.RepeatStr(AStr: String; ATimes: Integer): String;
-var
-  Ndx: Integer;
-begin
-
-  Result := '';
-
-  for Ndx := 0 to ATimes do
-  begin
-    Result := Result + AStr[Ndx];
-  end;
-end;
-
-function TBenchmark.FormatToHumanReadable(Val: Int64): String;
-var
-  Rounded: Double;
-const
-  FormatString: ShortString = '%.1f';
-begin
-  if ( Val >= 1000000000 ) then
-  begin
-    Rounded := Val / 1000000000;
-    Result := Format(String(FormatString) + ' B', [Rounded]);
-  end
-  else if ( Val >= 1000000 ) then
-  begin
-    Rounded := Val / 1000000;
-    Result := Format(String(FormatString) + ' M', [Rounded]);
-  end
-  else if ( Val >= 1000 ) then
-  begin
-    Rounded := Val / 1000;
-    Result := Format(String(FormatString) + ' K', [Rounded]);
-  end
-  else
-    Result := IntToStr(Val);
 end;
 
 procedure TBenchmark.RunBenchmark(ANums: TArray<Integer>; ABenchmarkFn: TBenchmarkFn);
@@ -111,11 +71,13 @@ begin
   end;
 end;
 
+// TVRec
 procedure TBenchmark.DisplayResults(AName: String);
 var
   max_length: Integer;
   ReadStr, WriteStr, TotalStr: String;
 begin
+
   WriteLn('-- ' + AName + ' --');
   WriteLn('- For ' + IntToStr(Length(Sorted)) + ' Elements');
   WriteLn('- Time: ' + IntToStr(TimeSpent) + 'ms');
@@ -129,7 +91,6 @@ begin
   WriteLn('- Read Accesses:        ' + RepeatStr(' ', max_length - Length(ReadStr))   + ReadStr  + '  Raw: ' + IntToStr(ReadArrayAccess));
   WriteLn('- Write Accesses:       ' + RepeatStr(' ', max_length - Length(WriteStr))  + WriteStr + '  Raw: ' + IntToStr(WriteArrayAccess));
   WriteLn('- Total Array Accesses: ' + RepeatStr(' ', max_length - Length(TotalStr))  + TotalStr + '  Raw: ' + IntToStr(TotalArrayAccess));
-
 
 end;
 
