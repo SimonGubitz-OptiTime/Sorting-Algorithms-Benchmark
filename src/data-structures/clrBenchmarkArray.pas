@@ -92,8 +92,14 @@ begin
 end;
 
 procedure TBenchmarkArray.FromArray(AList: TArray<TArrIterator>);
+var
+  Ndx: Integer;
 begin
-  FItems := AList;
+  SetLength(FItems, Length(AList));
+  for Ndx := 0 to High(AList) do
+  begin
+    FItems[Ndx] := AList[Ndx];
+  end;
 end;
 
 end.
