@@ -20,12 +20,46 @@ uses
   uInsertionSort,
   uMergesort,
   uQuicksort,
-  uSelectionSort;
+  uSelectionSort,
+  uStrUtils;
 
 type
   TForm1 = class(TForm)
-    Button1: TButton;
-    procedure Button1Click(Sender: TObject);
+    StartButton: TButton;
+    AmountInput: TEdit;
+    Label1: TLabel;
+    BubblesortHeading: TLabel;
+    HeapsortHeading: TLabel;
+    InsertionSortHeading: TLabel;
+    MergesortHeading: TLabel;
+    QuicksortHeading: TLabel;
+    SelectionSortHeading: TLabel;
+    BubblesortTimeLabel: TLabel;
+    BubblesortReadAccessLabel: TLabel;
+    BubblesortWriteAccessLabel: TLabel;
+    BubblesortTotalAccessLabel: TLabel;
+    HeapsortTimeLabel: TLabel;
+    HeapsortReadAccessLabel: TLabel;
+    HeapsortWriteAccessLabel: TLabel;
+    HeapsortTotalAccessLabel: TLabel;
+    InsertionSortTimeLabel: TLabel;
+    InsertionSortReadAccessLabel: TLabel;
+    InsertionSortWriteAccessLabel: TLabel;
+    InsertionSortTotalAccessLabel: TLabel;
+    MergesortTimeLabel: TLabel;
+    MergesortReadAccessLabel: TLabel;
+    MergesortWriteAccessLabel: TLabel;
+    MergesortTotalAccessLabel: TLabel;
+    QuicksortTimeLabel: TLabel;
+    QuicksortReadAccessLabel: TLabel;
+    QuicksortWriteAccessLabel: TLabel;
+    QuicksortTotalAccessLabel: TLabel;
+    SelectionSortTimeLabel: TLabel;
+    SelectionSortReadAccessLabel: TLabel;
+    SelectionSortWriteAccessLabel: TLabel;
+    SelectionSortTotalAccessLabel: TLabel;
+    procedure StartButtonClick(Sender: TObject);
+    procedure AmountInputChange(Sender: TObject);
   private
     { Private-Deklarationen }
   public
@@ -38,19 +72,6 @@ var
 implementation
 
 {$R *.dfm}
-
-function ArrToStr(AList: TArray<Integer>): String;
-var Ndx: Integer;
-begin
-  Result := '';
-  for Ndx := 0 to Length(AList) - 1 do
-  begin
-    if Ndx > 0 then
-      Result := Result + ', ';
-
-    Result := Result + IntToStr(AList[Ndx]);
-  end;
-end;
 
 procedure FillArrRandom(var AList: TArray<Integer>; ALength: Integer; maxVal: Integer = 9; allowZero: Boolean = false);
 var Ndx: Integer;
@@ -67,42 +88,73 @@ begin
   end;
 end;
 
-procedure FillArrExample(var AList: TArray<Integer>);
-begin
-  SetLength(AList, 9);
-  AList[0] := 8;
-  AList[1] := 2;
-  AList[2] := 4;
-  AList[3] := 7;
-  AList[4] := 1;
-  AList[5] := 3;
-  AList[6] := 9;
-  AList[7] := 6;
-  AList[8] := 5;
-end;
-
-procedure TForm1.Button1Click(Sender: TObject);
+procedure TForm1.StartButtonClick(Sender: TObject);
 var
   nums: TArray<Integer>;
   Benchmark: TBenchmark;
-  Heap: THeap;
+  InputAmount: Integer;
+  ReadStr: string;
+  WriteStr: string;
+  TotalStr: string;
 const
-  NumLength: Integer = 100000;
   MaxVal: Integer = 100;
   AllowZero: Boolean = false;
 begin
 
-  FillArrExample(nums);
-  // FillArrRandom(nums, NumLength, MaxVal, AllowZero);
 
-  Heap := THeap.Create(nums);
-  ShowMessage(ArrToStr(Heap.AsArray));
+  if ( not(TryStrToInt(AmountInput.Text, InputAmount)) ) then
+  begin
+    ShowMessage('Bitte nur richtige Zahlen eingeben.');
+    Exit;
+  end;
+
+  FillArrRandom(nums, InputAmount, MaxVal, AllowZero);
 
   Benchmark := TBenchmark.Create;
   try
     try
+
+      ReadStr := FormatToHumanReadable(Benchmark.ReadArrayAccess);
+      WriteStr := FormatToHumanReadable(Benchmark.WriteArrayAccess);
+      TotalStr := FormatToHumanReadable(Benchmark.TotalArrayAccess);
+
+      Benchmark.RunBenchmark(nums, Bubblesort);
+      BubblesortTimeLabel.Caption := '- Took: ' + IntToStr(Benchmark.TimeSpent) + 'ms';
+      BubblesortReadAccessLabel.Caption := '- Read Accesses:        '         + ReadStr  + '  Raw: ' + IntToStr(Benchmark.ReadArrayAccess);
+      BubblesortWriteAccessLabel.Caption := '- Write Accesses:       '        + WriteStr + '  Raw: ' + IntToStr(Benchmark.WriteArrayAccess);
+      BubblesortTotalAccessLabel.Caption := '- Total Array Accesses: '        + TotalStr + '  Raw: ' + IntToStr(Benchmark.TotalArrayAccess);
+
+      Benchmark.RunBenchmark(nums, InsertionSort);
+      InsertionSortTimeLabel.Caption := '- Took: ' + IntToStr(Benchmark.TimeSpent) + 'ms';
+      InsertionSortReadAccessLabel.Caption := '- Read Accesses:        '        + ReadStr  + '  Raw: ' + IntToStr(Benchmark.ReadArrayAccess);
+      InsertionSortWriteAccessLabel.Caption := '- Write Accesses:       '       + WriteStr + '  Raw: ' + IntToStr(Benchmark.WriteArrayAccess);
+      InsertionSortTotalAccessLabel.Caption := '- Total Array Accesses: '       + TotalStr + '  Raw: ' + IntToStr(Benchmark.TotalArrayAccess);
+
+      Benchmark.RunBenchmark(nums, Mergesort);
+      MergesortTimeLabel.Caption := '- Took: ' + IntToStr(Benchmark.TimeSpent) + 'ms';
+      MergesortReadAccessLabel.Caption := '- Read Accesses:        '        + ReadStr  + '  Raw: ' + IntToStr(Benchmark.ReadArrayAccess);
+      MergesortWriteAccessLabel.Caption := '- Write Accesses:       '       + WriteStr + '  Raw: ' + IntToStr(Benchmark.WriteArrayAccess);
+      MergesortTotalAccessLabel.Caption := '- Total Array Accesses: '       + TotalStr + '  Raw: ' + IntToStr(Benchmark.TotalArrayAccess);
+
       Benchmark.RunBenchmark(nums, Quicksort);
-      // Benchmark.DisplayResults('Quicksort');
+      QuicksortTimeLabel.Caption := '- Took: ' + IntToStr(Benchmark.TimeSpent) + 'ms';
+      QuicksortReadAccessLabel.Caption := '- Read Accesses:        '        + ReadStr  + '  Raw: ' + IntToStr(Benchmark.ReadArrayAccess);
+      QuicksortWriteAccessLabel.Caption := '- Write Accesses:       '       + WriteStr + '  Raw: ' + IntToStr(Benchmark.WriteArrayAccess);
+      QuicksortTotalAccessLabel.Caption := '- Total Array Accesses: '       + TotalStr + '  Raw: ' + IntToStr(Benchmark.TotalArrayAccess);
+
+      Benchmark.RunBenchmark(nums, Heapsort);
+      HeapsortTimeLabel.Caption := '- Took: ' + IntToStr(Benchmark.TimeSpent) + 'ms';
+      HeapsortReadAccessLabel.Caption := '- Read Accesses:        '   + ReadStr  + '  Raw: ' + IntToStr(Benchmark.ReadArrayAccess);
+      HeapsortWriteAccessLabel.Caption := '- Write Accesses:       '  + WriteStr + '  Raw: ' + IntToStr(Benchmark.WriteArrayAccess);
+      HeapsortTotalAccessLabel.Caption := '- Total Array Accesses: '  + TotalStr + '  Raw: ' + IntToStr(Benchmark.TotalArrayAccess);
+
+      Benchmark.RunBenchmark(nums, SelectionSort);
+      SelectionSortTimeLabel.Caption := '- Took: ' + IntToStr(Benchmark.TimeSpent) + 'ms';
+      SelectionSortReadAccessLabel.Caption := '- Read Accesses:        '  + ReadStr  + '  Raw: ' + IntToStr(Benchmark.ReadArrayAccess);
+      SelectionSortWriteAccessLabel.Caption := '- Write Accesses:       ' + WriteStr + '  Raw: ' + IntToStr(Benchmark.WriteArrayAccess);
+      SelectionSortTotalAccessLabel.Caption := '- Total Array Accesses: ' + TotalStr + '  Raw: ' + IntToStr(Benchmark.TotalArrayAccess);
+
+
     finally
       Benchmark.Free;
     end;
@@ -110,6 +162,11 @@ begin
     on E: Exception do
       ShowMessage('Error: ' + E.Message);
   end;
+end;
+
+procedure TForm1.AmountInputChange(Sender: TObject);
+begin
+  StartButton.Enabled := Length(AmountInput.Text) <> 0;
 end;
 
 end.
