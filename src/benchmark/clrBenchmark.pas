@@ -12,7 +12,6 @@ type
   TBenchmarkFn = function(ANums: TBenchmarkArray): TArray<Integer>;
   TBenchmark = class
     private
-      FAlgoName: String;
       FTimeSpent: UInt64;
       FTotalArrayAccess: UInt64;
       FReadArrayAccess: UInt64;
@@ -40,7 +39,6 @@ implementation
 
 constructor TBenchmark.Create();
 begin
-  FAlgoName := '';
   inherited Create;
 end;
 
@@ -94,7 +92,7 @@ var
   BenchmarkArray: TBenchmarkArray;
 begin
 
-  FAlgoName := MethodName(@ABenchmarkFn);
+  TBenchmarkArray.ResetBenchmarkNumbers();
 
   // Einen TBenchmarkArray erstellen
   BenchmarkArray := TBenchmarkArray.Create(ANums);

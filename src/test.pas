@@ -4,7 +4,6 @@ uses
   Generics.Collections,
   SysUtils,
   clrBenchmark,
-  clrHeap,
   uBubblesort,
   uHeapsort,
   uInsertionSort,
@@ -58,7 +57,7 @@ var
   nums: TArray<Integer>;
   Benchmark: TBenchmark;
 const
-  NumLength: Integer = 150000;
+  NumLength: Integer = 15000;
   MaxVal: Integer = 100;
   AllowZero: Boolean = false;
 begin

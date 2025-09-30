@@ -13,8 +13,6 @@ implementation
 
 function Heapsort(AList: TBenchmarkArray): TArray<Integer>;
 var
-  Ndx: Integer;
-  temp: Integer;
   size: Integer;
   Heap: THeap;
 begin

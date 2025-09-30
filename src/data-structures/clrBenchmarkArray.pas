@@ -18,6 +18,8 @@ type
       constructor Create(AList: TArray<Integer>);
       destructor Destroy(); reintroduce;
 
+      class procedure ResetBenchmarkNumbers();
+
       function  GetItem(AIndex: Integer): Integer;
       procedure SetItem(AIndex: Integer; AVal: Integer);
 
@@ -48,6 +50,12 @@ end;
 destructor TBenchmarkArray.Destroy();
 begin
   inherited Free;
+end;
+
+class procedure TBenchmarkArray.ResetBenchmarkNumbers();
+begin
+  FReadAccess := 0;
+  FWriteAccess := 0;
 end;
 
 function TBenchmarkArray.GetItem(AIndex: Integer): Integer;
