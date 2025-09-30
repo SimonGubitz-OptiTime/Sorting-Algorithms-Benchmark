@@ -68,7 +68,8 @@ begin
   // FillArrRandom(nums, NumLength, MaxVal, AllowZero);
 
 
-  Heap := THeap.heapify(nums);
+  WriteLn(ArrToStr(nums));
+  Heap := THeap.Create(nums);
   WriteLn(ArrToStr(Heap.AsArray));
 
 

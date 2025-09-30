@@ -3,8 +3,8 @@ unit clrHeap;
 interface
 
 uses
-  SysUtils,
-  Vcl.Dialogs;
+  Math,
+  SysUtils;
 
 type
   THeapType = (MAX_HEAP, MIN_HEAP);
@@ -14,35 +14,52 @@ type
       FItems: TArray<Integer>; // TODO: Change this to a TBenchmarkArray to still capture access data
 
 
-      // function  GetLevelStartNdx(ALevel: Integer): Integer;
+      // procedure IncreaseKey();
+      // procedure DecreaseKey();
+
+      procedure SiftUp(ANdx: Integer);
+      procedure SiftDown(ANdx: Integer);
+
+      function GetParentIndex(ANdx: Integer): Integer;
+      function GetLeftIndex(ANdx: Integer): Integer;
+      function GetRightIndex(ANdx: Integer): Integer;
 
     public
-      constructor Create(AFirstVal: Integer; AType: THeapType = THeapType.MAX_HEAP);
+      constructor Create(AList: TArray<Integer>; AType: THeapType = THeapType.MAX_HEAP);
       destructor  Destroy();
 
-      class function heapify(AList: TArray<Integer>; AType: THeapType = THeapType.MAX_HEAP): THeap;
+      procedure heapify(AList: TArray<Integer>; ASize: Integer; ANdx: Integer; AType: THeapType = THeapType.MAX_HEAP);
 
-      procedure AddNode(ANodeVal: Integer);
-      procedure RemoveNode();
+      procedure Push(ANodeVal: Integer);
+      procedure Pop(ANdx: Integer);
 
-      procedure TrimExcess();
-
-      function  GetLast(): Integer;
-      procedure SetLast(ANew: Integer);
+      function  GetIsEmpty(): Boolean;
 
       property Size: Integer read FSize;
-      property Last: Integer read GetLast write SetLast;
+      property IsEmpty: Boolean read GetIsEmpty;
+
       property AsArray: TArray<Integer> read FItems;
   end;
 
 implementation
 
-constructor THeap.Create(AFirstVal: Integer; AType: THeapType = THeapType.MAX_HEAP);
+constructor THeap.Create(AList: TArray<Integer>; AType: THeapType = THeapType.MAX_HEAP);
+var
+  leaf_start, leaves_size: Integer;
+  size: Integer;
+  Ndx: Integer;
 begin
-  FSize := 1;
+  FSize := Length(AList);
+  SetLength(FItems, FSize);
 
-  SetLength(FItems, 1);
-  FItems[0] := AFirstVal;
+  // leaves -> arr[Floor(size/2) + 1] to arr[size]
+  size := Length(AList);
+  leaf_start := Floor(size/2) + 1;
+  leaves_size := leaf_start - (size - 1);
+  for Ndx := leaves_size - 1 downto 0 do
+  begin
+    heapify(AList, size, Ndx);
+  end;
 
   inherited Create;
 end;
@@ -52,109 +69,102 @@ begin
   inherited Destroy;
 end;
 
-class function THeap.heapify(AList: TArray<Integer>; AType: THeapType = THeapType.MAX_HEAP): THeap;
+procedure THeap.heapify(AList: TArray<Integer>; ASize: Integer; ANdx: Integer; AType: THeapType = THeapType.MAX_HEAP);
 var
   Ndx: Integer;
-  max_val: Integer;
-  Ndx2: Integer;
-begin
-  max_val := 0;
-
-  if ( AType = THeapType.MAX_HEAP ) then
-  begin
-
-    for Ndx := 0 to Length(AList) - 1 do
-    begin
-      if ( AList[Ndx] > max_val ) then
-      begin
-        max_val := AList[Ndx];
-      end;
-    end;
-
-    // Remove max_val from the List
-    for Ndx := 0 to Length(AList) - 1 do
-    begin
-      if ( AList[Ndx] = max_val ) then
-      begin
-
-        for Ndx2 := Ndx + 1 to Length(AList) - 1 do
-        begin
-          AList[Ndx2 - 1] := AList[Ndx2];
-        end;
-
-        SetLength(AList, Length(AList)-1);
-        break;
-      end;
-    end;
-
-
-    Result := THeap.Create(max_val); // 9
-
-    for Ndx := 1 to Length(AList) - 1 do
-    begin
-      Result.AddNode(AList[Ndx]); //
-    end;
-
-  end;
-end;
-
-procedure THeap.AddNode(ANodeVal: Integer);
-var
-  Ndx: Integer;
+  l, r, largest: Integer;
+  size: Integer;
   temp: Integer;
-  FoundPlace: Boolean;
 begin
 
-  FoundPlace := false;
+  size := Length(AList) - 1;
+  l := GetLeftIndex(ANdx);
+  r := GetRightIndex(ANdx);
 
-
-  Ndx := 0;
-  // TODO: Change dependant on Type max or min-heap
-  while ( Ndx < FSize ) do
+  if ( (l < size)
+    and (AList[l] > AList[ANdx]) ) then
   begin
-    if ( ANodeVal > FItems[Ndx] ) then
-    begin
-
-      ShowMessage(IntToStr(Ndx) + '. Switching ' + IntToStr(FItems[Ndx]) + ' and ' + IntToStr(ANodeVal));
-      temp := FItems[Ndx];
-      FItems[Ndx] := ANodeVal;
-      AddNode(temp);
-
-      FoundPlace := true;
-      break;
-    end;
-    Inc(Ndx);
+    largest := l;
   end;
 
-  if ( not(FoundPlace) ) then
+  if ( (r < size)
+    and (AList[r] > AList[largest]) ) then
   begin
-    Inc(FSize);
-    SetLength(FItems, FSize);
-    FItems[High(FItems)] := ANodeVal;
+    largest := r;
   end;
 
-  // Last := ANodeVal;
+  if ( largest = ANdx ) then
+  begin
+    temp := AList[ANdx];
+    AList[ANdx] := AList[largest];
+    AList[largest] := AList[ANdx];
+
+    heapify(AList, size, largest, AType);
+  end;
 
 end;
 
-procedure THeap.RemoveNode();
+procedure THeap.Push(ANodeVal: Integer);
+var
+  CurrentNdx, ParentNdx: Integer;
+begin
+  SetLength(FItems, Length(FItems) + 1);
+  CurrentNdx := High(FItems);
+  ParentNdx := Floor((CurrentNdx - 1) / 2);
+  FItems[CurrentNdx] := ANodeVal;
+
+  while FItems[CurrentNdx] > FItems[ParentNdx] do
+  begin
+    SiftUp(CurrentNdx);
+  end;
+end;
+
+procedure THeap.SiftUp(ANdx: Integer);
+var
+  ParentNdx: Integer;
+  Swap: Integer;
+begin
+  ParentNdx := Floor((ANdx - 1) / 2);
+  Swap := FItems[ParentNdx];
+  FItems[ParentNdx] := FItems[ANdx];
+  FItems[ANdx] := Swap;
+end;
+
+procedure THeap.SiftDown(ANdx: Integer);
+var
+  ChildNdx: Integer;
+  Swap: Integer;
+begin
+  
+end;
+
+function THeap.GetParentIndex(ANdx: Integer): Integer;
+begin
+  Result := Floor(ANdx/2);
+end;
+
+function THeap.GetLeftIndex(ANdx: Integer): Integer;
+begin
+  Result := 2 * ANdx;
+end;
+
+function THeap.GetRightIndex(ANdx: Integer): Integer;
+begin
+  Result := 2 * ANdx + 1;
+end;
+
+procedure THeap.Pop(ANdx: Integer);
 begin
   // is
 end;
 
-function THeap.GetLast(): Integer;
+function THeap.GetIsEmpty(): Boolean;
 begin
-  Result := FItems[FSize - 1];
-end;
-
-procedure THeap.SetLast(ANew: Integer);
-begin
-  FItems[FSize - 1] := ANew;
-end;
-
-procedure THeap.TrimExcess();
-begin
-  SetLength(FItems, FSize);
+  Result := false;
+  if ( Size = 0 ) then
+  begin
+    Result := true;
+  end;
 end;
 
 
