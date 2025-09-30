@@ -16,7 +16,7 @@ var
   Heap: THeap;
 begin
 
-  Heap := THeap.Create(AList.AsArray);
+  Heap := THeap.Create(AList);
 
 end;
 

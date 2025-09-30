@@ -4,14 +4,15 @@ interface
 
 uses
   Math,
-  SysUtils;
+  SysUtils,
+  clrBenchmarkArray;
 
 type
   THeapType = (MAX_HEAP, MIN_HEAP);
   THeap = class
     private
       FSize: Integer;
-      FItems: TArray<Integer>; // TODO: Change this to a TBenchmarkArray to still capture access data
+      FItems: TBenchmarkArray;
 
 
       function GetParentIndex(ANdx: Integer): Integer;
@@ -19,11 +20,12 @@ type
       function GetRightIndex(ANdx: Integer): Integer;
 
     public
-      constructor Create(AList: TArray<Integer>; AType: THeapType = THeapType.MAX_HEAP);
+      constructor Create(AList: TArray<Integer>; AType: THeapType = THeapType.MAX_HEAP); overload;
+      constructor Create(AList: TBenchmarkArray; AType: THeapType = THeapType.MAX_HEAP); overload;
       destructor  Destroy();
 
-      procedure heapify(AList: TArray<Integer>; ASize: Integer; ANdx: Integer; AType: THeapType = THeapType.MAX_HEAP);
-      function  GetAsArray(): TArray<Integer>;
+      procedure heapify(AList: TBenchmarkArray; ASize: Integer; ANdx: Integer; AType: THeapType = THeapType.MAX_HEAP);
+      function  GetAsArray():  TArray<Integer>;
 
       property Size: Integer read FSize;
       property AsArray: TArray<Integer> read GetAsArray;
@@ -35,8 +37,32 @@ constructor THeap.Create(AList: TArray<Integer>; AType: THeapType = THeapType.MA
 var
   Ndx: Integer;
 begin
+  FItems := TBenchmarkArray.Create([]);
   FSize := Length(AList) + 1;
-  SetLength(FItems, FSize);
+  FItems.SetCapacity(FSize);
+  FItems[0] := 0;
+  for Ndx := 1 to FSize -1 do
+  begin
+    FItems[Ndx] := AList[Ndx - 1];
+  end;
+
+
+  // leaves -> arr[Floor(size/2) + 1] to arr[size]
+  for Ndx := Floor(FSize/2) downto 1 do // ignore the leaves
+  begin
+    heapify(FItems, FSize, Ndx);
+  end;
+
+  inherited Create;
+end;
+
+constructor THeap.Create(AList: TBenchmarkArray; AType: THeapType = THeapType.MAX_HEAP);
+var
+  Ndx: Integer;
+begin
+  FItems := TBenchmarkArray.Create([]);
+  FSize := AList.Count + 1;
+  FItems.SetCapacity(FSize);
   FItems[0] := 0;
   for Ndx := 1 to FSize -1 do
   begin
@@ -58,7 +84,7 @@ begin
   inherited Destroy;
 end;
 
-procedure THeap.heapify(AList: TArray<Integer>; ASize: Integer; ANdx: Integer; AType: THeapType = THeapType.MAX_HEAP);
+procedure THeap.heapify(AList: TBenchmarkArray; ASize: Integer; ANdx: Integer; AType: THeapType = THeapType.MAX_HEAP);
 var
   Ndx: Integer;
   l, r, largest: Integer;
@@ -66,7 +92,7 @@ var
   temp: Integer;
 begin
 
-  size := Length(AList) - 1;
+  size := AList.Count - 1;
   l := GetLeftIndex(ANdx);
   r := GetRightIndex(ANdx);
   largest := ANdx;
@@ -111,7 +137,7 @@ end;
 
 function THeap.GetAsArray(): TArray<Integer>;
 begin
-  Result := Copy(FItems, 1, Length(FItems) - 1);
+  Result := Copy(FItems.AsArray, 1, FItems.Count - 1);
 end;
 
 

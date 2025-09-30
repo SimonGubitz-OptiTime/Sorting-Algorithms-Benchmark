@@ -20,6 +20,8 @@ type
 
       function  GetItem(AIndex: Integer): Integer;
       procedure SetItem(AIndex: Integer; AVal: Integer);
+
+      procedure SetCapacity(ALength: Integer);
       function  GetCount(): Integer;
 
       procedure FromArray(AList: TArray<TArrIterator>);
@@ -71,6 +73,14 @@ end;
 function TBenchmarkArray.GetCount(): Integer;
 begin
   Result := Length(FItems);
+end;
+
+procedure TBenchmarkArray.SetCapacity(ALength: Integer);
+begin
+  if ( ALength < 0 ) then
+    raise ERangeError.CreateFmt('Cannot set Capacity of TBenchmarkArray to below zero. Tried settign it to: %d', [ALength]);
+
+  SetLength(FItems, ALength);
 end;
 
 procedure TBenchmarkArray.FromArray(AList: TArray<TArrIterator>);
