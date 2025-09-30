@@ -95,7 +95,7 @@ begin
   FillArrExample(nums);
   // FillArrRandom(nums, NumLength, MaxVal, AllowZero);
 
-  Heap := THeap.heapify(nums);
+  Heap := THeap.Create(nums);
   ShowMessage(ArrToStr(Heap.AsArray));
 
   Benchmark := TBenchmark.Create;
