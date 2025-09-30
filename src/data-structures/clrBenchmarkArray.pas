@@ -1,0 +1,105 @@
+unit clrBenchmarkArray;
+
+interface
+
+uses
+  Generics.Collections,
+  SysUtils,
+  uTypes;
+
+type
+  TBenchmarkArray = class
+    private
+      FItems: TArray<Integer>;
+      class var FReadAccess: UInt64;
+      class var FWriteAccess: UInt64;
+
+    public
+      constructor Create(AList: TArray<Integer>);
+      destructor Destroy(); reintroduce;
+
+      class procedure ResetBenchmarkNumbers();
+
+      function  GetItem(AIndex: Integer): Integer;
+      procedure SetItem(AIndex: Integer; AVal: Integer);
+
+      procedure SetCapacity(ALength: Integer);
+      function  GetCount(): Integer;
+
+      procedure FromArray(AList: TArray<TArrIterator>);
+
+      property Count: Integer read GetCount;
+      // same as https://docwiki.embarcadero.com/Libraries/Athens/de/System.Generics.Collections.TList.Items
+      property Items[Index: Integer]: Integer read GetItem write SetItem; default;
+      property AsArray: TArray<Integer> read FItems;
+
+      class property ReadAccess: UInt64 read FReadAccess;
+      class property WriteAccess: UInt64 read FWriteAccess;
+  end;
+
+
+implementation
+
+constructor TBenchmarkArray.Create(AList: TArray<Integer>);
+begin
+  inherited Create;
+
+  FromArray(AList);
+end;
+
+destructor TBenchmarkArray.Destroy();
+begin
+  inherited Free;
+end;
+
+class procedure TBenchmarkArray.ResetBenchmarkNumbers();
+begin
+  FReadAccess := 0;
+  FWriteAccess := 0;
+end;
+
+function TBenchmarkArray.GetItem(AIndex: Integer): Integer;
+begin
+
+  if ( AIndex >= Length(FItems) ) then
+    raise ERangeError.CreateFmt('Trying to Get out of bounds in TBenchmarkArray. Length: %d, Requested Get on Index: %d.', [ Length(FItems), AIndex ]);
+
+  Inc(TBenchmarkArray.FReadAccess);
+  Result := FItems[AIndex];
+end;
+
+procedure TBenchmarkArray.SetItem(AIndex: Integer; AVal: Integer);
+begin
+
+  if ( AIndex >= Length(FItems) ) then
+    raise ERangeError.CreateFmt('Trying to Set out of bounds in TBenchmarkArray. Length: %d, Requested Set on Index: %d.', [ Length(FItems), AIndex ]);
+
+  Inc(TBenchmarkArray.FWriteAccess);
+  FItems[AIndex] := AVal;
+end;
+
+function TBenchmarkArray.GetCount(): Integer;
+begin
+  Result := Length(FItems);
+end;
+
+procedure TBenchmarkArray.SetCapacity(ALength: Integer);
+begin
+  if ( ALength < 0 ) then
+    raise ERangeError.CreateFmt('Cannot set Capacity of TBenchmarkArray to below zero. Tried settign it to: %d', [ALength]);
+
+  SetLength(FItems, ALength);
+end;
+
+procedure TBenchmarkArray.FromArray(AList: TArray<TArrIterator>);
+var
+  Ndx: Integer;
+begin
+  SetLength(FItems, Length(AList));
+  for Ndx := 0 to High(AList) do
+  begin
+    FItems[Ndx] := AList[Ndx];
+  end;
+end;
+
+end.
