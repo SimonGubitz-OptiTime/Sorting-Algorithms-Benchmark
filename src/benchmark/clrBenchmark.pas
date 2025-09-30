@@ -5,6 +5,7 @@ interface
 uses
   Classes,
   Generics.Collections,
+  Math,
   SysUtils,
   clrBenchmarkArray,
   uStrUtils;
@@ -74,7 +75,7 @@ end;
 // TVRec
 procedure TBenchmark.DisplayResults(AName: String);
 var
-  max_length: Integer;
+  MaxLength: Integer;
   ReadStr, WriteStr, TotalStr: String;
 begin
 
@@ -86,11 +87,11 @@ begin
   ReadStr := FormatToHumanReadable(ReadArrayAccess);
   WriteStr := FormatToHumanReadable(WriteArrayAccess);
   TotalStr := FormatToHumanReadable(TotalArrayAccess);
-  max_length := Length(TotalStr);
+  MaxLength := Max(Max(Length(ReadStr), Length(WriteStr)), Length(TotalStr));
 
-  WriteLn('- Read Accesses:        ' + RepeatStr(' ', max_length - Length(ReadStr))   + ReadStr  + '  Raw: ' + IntToStr(ReadArrayAccess));
-  WriteLn('- Write Accesses:       ' + RepeatStr(' ', max_length - Length(WriteStr))  + WriteStr + '  Raw: ' + IntToStr(WriteArrayAccess));
-  WriteLn('- Total Array Accesses: ' + RepeatStr(' ', max_length - Length(TotalStr))  + TotalStr + '  Raw: ' + IntToStr(TotalArrayAccess));
+  WriteLn('- Read Accesses:        ' + RepeatStr(' ', MaxLength - Length(ReadStr))   + ReadStr  + '  Raw: ' + IntToStr(ReadArrayAccess));
+  WriteLn('- Write Accesses:       ' + RepeatStr(' ', MaxLength - Length(WriteStr))  + WriteStr + '  Raw: ' + IntToStr(WriteArrayAccess));
+  WriteLn('- Total Array Accesses: ' + RepeatStr(' ', MaxLength - Length(TotalStr))  + TotalStr + '  Raw: ' + IntToStr(TotalArrayAccess));
 
   WriteLn;
 

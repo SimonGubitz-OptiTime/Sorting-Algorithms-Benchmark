@@ -45,7 +45,7 @@ object Form1: TForm1
     ParentFont = False
   end
   object InsertionSortHeading: TLabel
-    Left = 780
+    Left = 756
     Top = 320
     Width = 108
     Height = 25
@@ -84,7 +84,7 @@ object Form1: TForm1
     ParentFont = False
   end
   object SelectionSortHeading: TLabel
-    Left = 780
+    Left = 756
     Top = 464
     Width = 111
     Height = 25
@@ -153,28 +153,28 @@ object Form1: TForm1
     Caption = 'Total Array Access: '
   end
   object InsertionSortTimeLabel: TLabel
-    Left = 780
+    Left = 756
     Top = 351
     Width = 32
     Height = 15
     Caption = 'Time: '
   end
   object InsertionSortReadAccessLabel: TLabel
-    Left = 780
+    Left = 756
     Top = 372
     Width = 82
     Height = 15
     Caption = 'Read Accesses: '
   end
   object InsertionSortWriteAccessLabel: TLabel
-    Left = 780
+    Left = 756
     Top = 393
     Width = 73
     Height = 15
     Caption = 'Write Access: '
   end
   object InsertionSortTotalAccessLabel: TLabel
-    Left = 780
+    Left = 756
     Top = 414
     Width = 101
     Height = 15
@@ -237,28 +237,28 @@ object Form1: TForm1
     Caption = 'Total Array Access: '
   end
   object SelectionSortTimeLabel: TLabel
-    Left = 780
+    Left = 756
     Top = 495
     Width = 32
     Height = 15
     Caption = 'Time: '
   end
   object SelectionSortReadAccessLabel: TLabel
-    Left = 780
+    Left = 756
     Top = 516
     Width = 82
     Height = 15
     Caption = 'Read Accesses: '
   end
   object SelectionSortWriteAccessLabel: TLabel
-    Left = 780
+    Left = 756
     Top = 537
     Width = 73
     Height = 15
     Caption = 'Write Access: '
   end
   object SelectionSortTotalAccessLabel: TLabel
-    Left = 780
+    Left = 756
     Top = 558
     Width = 101
     Height = 15

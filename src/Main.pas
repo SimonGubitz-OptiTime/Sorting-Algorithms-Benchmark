@@ -93,9 +93,9 @@ var
   nums: TArray<Integer>;
   Benchmark: TBenchmark;
   InputAmount: Integer;
-  ReadStr: string;
-  WriteStr: string;
-  TotalStr: string;
+  ReadStr: String;
+  WriteStr: String;
+  TotalStr: String;
 const
   MaxVal: Integer = 100;
   AllowZero: Boolean = false;
@@ -113,42 +113,55 @@ begin
   Benchmark := TBenchmark.Create;
   try
     try
-
+      Benchmark.RunBenchmark(nums, Bubblesort);
       ReadStr := FormatToHumanReadable(Benchmark.ReadArrayAccess);
       WriteStr := FormatToHumanReadable(Benchmark.WriteArrayAccess);
       TotalStr := FormatToHumanReadable(Benchmark.TotalArrayAccess);
-
-      Benchmark.RunBenchmark(nums, Bubblesort);
       BubblesortTimeLabel.Caption := '- Took: ' + IntToStr(Benchmark.TimeSpent) + 'ms';
       BubblesortReadAccessLabel.Caption := '- Read Accesses:        '         + ReadStr  + '  Raw: ' + IntToStr(Benchmark.ReadArrayAccess);
       BubblesortWriteAccessLabel.Caption := '- Write Accesses:       '        + WriteStr + '  Raw: ' + IntToStr(Benchmark.WriteArrayAccess);
       BubblesortTotalAccessLabel.Caption := '- Total Array Accesses: '        + TotalStr + '  Raw: ' + IntToStr(Benchmark.TotalArrayAccess);
 
+      Benchmark.RunBenchmark(nums, Heapsort);
+      ReadStr := FormatToHumanReadable(Benchmark.ReadArrayAccess);
+      WriteStr := FormatToHumanReadable(Benchmark.WriteArrayAccess);
+      TotalStr := FormatToHumanReadable(Benchmark.TotalArrayAccess);
+      HeapsortTimeLabel.Caption := '- Took: ' + IntToStr(Benchmark.TimeSpent) + 'ms';
+      HeapsortReadAccessLabel.Caption := '- Read Accesses:        '   + ReadStr  + '  Raw: ' + IntToStr(Benchmark.ReadArrayAccess);
+      HeapsortWriteAccessLabel.Caption := '- Write Accesses:       '  + WriteStr + '  Raw: ' + IntToStr(Benchmark.WriteArrayAccess);
+      HeapsortTotalAccessLabel.Caption := '- Total Array Accesses: '  + TotalStr + '  Raw: ' + IntToStr(Benchmark.TotalArrayAccess);
+
       Benchmark.RunBenchmark(nums, InsertionSort);
+      ReadStr := FormatToHumanReadable(Benchmark.ReadArrayAccess);
+      WriteStr := FormatToHumanReadable(Benchmark.WriteArrayAccess);
+      TotalStr := FormatToHumanReadable(Benchmark.TotalArrayAccess);
       InsertionSortTimeLabel.Caption := '- Took: ' + IntToStr(Benchmark.TimeSpent) + 'ms';
       InsertionSortReadAccessLabel.Caption := '- Read Accesses:        '        + ReadStr  + '  Raw: ' + IntToStr(Benchmark.ReadArrayAccess);
       InsertionSortWriteAccessLabel.Caption := '- Write Accesses:       '       + WriteStr + '  Raw: ' + IntToStr(Benchmark.WriteArrayAccess);
       InsertionSortTotalAccessLabel.Caption := '- Total Array Accesses: '       + TotalStr + '  Raw: ' + IntToStr(Benchmark.TotalArrayAccess);
 
       Benchmark.RunBenchmark(nums, Mergesort);
+      ReadStr := FormatToHumanReadable(Benchmark.ReadArrayAccess);
+      WriteStr := FormatToHumanReadable(Benchmark.WriteArrayAccess);
+      TotalStr := FormatToHumanReadable(Benchmark.TotalArrayAccess);
       MergesortTimeLabel.Caption := '- Took: ' + IntToStr(Benchmark.TimeSpent) + 'ms';
       MergesortReadAccessLabel.Caption := '- Read Accesses:        '        + ReadStr  + '  Raw: ' + IntToStr(Benchmark.ReadArrayAccess);
       MergesortWriteAccessLabel.Caption := '- Write Accesses:       '       + WriteStr + '  Raw: ' + IntToStr(Benchmark.WriteArrayAccess);
       MergesortTotalAccessLabel.Caption := '- Total Array Accesses: '       + TotalStr + '  Raw: ' + IntToStr(Benchmark.TotalArrayAccess);
 
       Benchmark.RunBenchmark(nums, Quicksort);
+      ReadStr := FormatToHumanReadable(Benchmark.ReadArrayAccess);
+      WriteStr := FormatToHumanReadable(Benchmark.WriteArrayAccess);
+      TotalStr := FormatToHumanReadable(Benchmark.TotalArrayAccess);
       QuicksortTimeLabel.Caption := '- Took: ' + IntToStr(Benchmark.TimeSpent) + 'ms';
       QuicksortReadAccessLabel.Caption := '- Read Accesses:        '        + ReadStr  + '  Raw: ' + IntToStr(Benchmark.ReadArrayAccess);
       QuicksortWriteAccessLabel.Caption := '- Write Accesses:       '       + WriteStr + '  Raw: ' + IntToStr(Benchmark.WriteArrayAccess);
       QuicksortTotalAccessLabel.Caption := '- Total Array Accesses: '       + TotalStr + '  Raw: ' + IntToStr(Benchmark.TotalArrayAccess);
 
-      Benchmark.RunBenchmark(nums, Heapsort);
-      HeapsortTimeLabel.Caption := '- Took: ' + IntToStr(Benchmark.TimeSpent) + 'ms';
-      HeapsortReadAccessLabel.Caption := '- Read Accesses:        '   + ReadStr  + '  Raw: ' + IntToStr(Benchmark.ReadArrayAccess);
-      HeapsortWriteAccessLabel.Caption := '- Write Accesses:       '  + WriteStr + '  Raw: ' + IntToStr(Benchmark.WriteArrayAccess);
-      HeapsortTotalAccessLabel.Caption := '- Total Array Accesses: '  + TotalStr + '  Raw: ' + IntToStr(Benchmark.TotalArrayAccess);
-
       Benchmark.RunBenchmark(nums, SelectionSort);
+      ReadStr := FormatToHumanReadable(Benchmark.ReadArrayAccess);
+      WriteStr := FormatToHumanReadable(Benchmark.WriteArrayAccess);
+      TotalStr := FormatToHumanReadable(Benchmark.TotalArrayAccess);
       SelectionSortTimeLabel.Caption := '- Took: ' + IntToStr(Benchmark.TimeSpent) + 'ms';
       SelectionSortReadAccessLabel.Caption := '- Read Accesses:        '  + ReadStr  + '  Raw: ' + IntToStr(Benchmark.ReadArrayAccess);
       SelectionSortWriteAccessLabel.Caption := '- Write Accesses:       ' + WriteStr + '  Raw: ' + IntToStr(Benchmark.WriteArrayAccess);

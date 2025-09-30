@@ -18,9 +18,9 @@ begin
 
   Result := '';
 
-  for Ndx := 0 to ATimes do
+  for Ndx := 0 to ATimes - 1 do
   begin
-    Result := Result + AStr[Ndx];
+    Result := Result + AStr;
   end;
 end;
 
