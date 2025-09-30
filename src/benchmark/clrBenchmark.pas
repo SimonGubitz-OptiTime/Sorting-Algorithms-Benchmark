@@ -92,6 +92,8 @@ begin
   WriteLn('- Write Accesses:       ' + RepeatStr(' ', max_length - Length(WriteStr))  + WriteStr + '  Raw: ' + IntToStr(WriteArrayAccess));
   WriteLn('- Total Array Accesses: ' + RepeatStr(' ', max_length - Length(TotalStr))  + TotalStr + '  Raw: ' + IntToStr(TotalArrayAccess));
 
+  WriteLn;
+
 end;
 
 

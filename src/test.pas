@@ -57,7 +57,7 @@ var
   nums: TArray<Integer>;
   Benchmark: TBenchmark;
 const
-  NumLength: Integer = 100000;
+  NumLength: Integer = 15000;
   MaxVal: Integer = 100;
   AllowZero: Boolean = false;
 begin
@@ -68,8 +68,24 @@ begin
   Benchmark := TBenchmark.Create;
   try
     try
+      Benchmark.RunBenchmark(nums, Bubblesort);
+      Benchmark.DisplayResults('Bubblesort');
+
+      Benchmark.RunBenchmark(nums, Heapsort);
+      Benchmark.DisplayResults('Heapsort');
+
+      Benchmark.RunBenchmark(nums, InsertionSort);
+      Benchmark.DisplayResults('Insertion Sort');
+
+      Benchmark.RunBenchmark(nums, Mergesort);
+      Benchmark.DisplayResults('Mergesort');
+
       Benchmark.RunBenchmark(nums, Quicksort);
       Benchmark.DisplayResults('Quicksort');
+
+      Benchmark.RunBenchmark(nums, SelectionSort);
+      Benchmark.DisplayResults('Selection Sort');
+
     finally
       Benchmark.Free;
     end;

@@ -28,7 +28,7 @@ all:
 
 # Clean compiled files
 clean:
-	rm -f $(OUTDIR)/*.o $(OUTDIR)/*.ppu $(OUTDIR)/*.dcu $(OUTDIR)/*.exe $(OUTDIR)/test
+	rm -f $(OUTDIR)/*.o $(OUTDIR)/*.ppu $(OUTDIR)/*.dcu $(OUTDIR)/*.exe $(OUTDIR)/test \
     rm -rf $(OUTDIR)/Win32/ $(OUTDIR)/Win64/
 
 # Run the program
