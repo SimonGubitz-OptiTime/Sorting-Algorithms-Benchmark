@@ -68,8 +68,20 @@ begin
   Benchmark := TBenchmark.Create;
   try
     try
+      Benchmark.RunBenchmark(nums, Bubblesort);
+      Benchmark.DisplayResults('Bubblesort');
+
+      Benchmark.RunBenchmark(nums, InsertionSort);
+      Benchmark.DisplayResults('Insertion Sort');
+
+      Benchmark.RunBenchmark(nums, Quicksort);
+      Benchmark.DisplayResults('Quicksort');
+
       Benchmark.RunBenchmark(nums, Heapsort);
       Benchmark.DisplayResults('Heapsort');
+
+      Benchmark.RunBenchmark(nums, SelectionSort);
+      Benchmark.DisplayResults('Selection Sort');
     finally
       Benchmark.Free;
     end;
